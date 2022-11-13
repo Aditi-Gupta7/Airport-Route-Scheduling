@@ -26,23 +26,6 @@ def create_list():
             
     return airports, routes, start_airport
 
-#To perform DFS and find the stack
-def dfs1(i):
-    vis[i] = True
-    for j in range(n):
-        if route_matrix[i][j] == 1:
-            if (vis[j] == False) :
-                dfs1(j)
-    stack.append(i)
-
-#To perform the DFS, after the stack is full
-def dfs2(u, representative):
-    vis2[u] = True
-    who[u] = representative
-    for j in range(n):
-        if route_matrix_reverse[u][j] == 1:
-            if (vis2[j] == False) :
-                dfs2(j,representative)
 
 
 airports, routes, start_airport = create_list()
