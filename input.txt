@@ -1,0 +1,20 @@
+airports = CNH, MUD, KLO, DLE, WBL, TMV, TLE, KRA, CEB, PBJ, APD, OIR, HDY, PNU, MGE
+routes
+CNH, DLE,
+CNH, MUD,
+DLE, KLO,
+MUD, KLO,
+KLO, CEB, 
+KLO, WBL, 
+CEB, PBJ, 
+TMV, WBL, 
+WBL, KRA, 
+TLE, TMV, 
+APD, DLE, 
+OIR, DLE, 
+APD, OIR, 
+HDY, APD, 
+MGE, OIR, 
+HDY, PNU, 
+PNU, MGE,
+Starting Airport = DLE
