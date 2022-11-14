@@ -29,14 +29,14 @@ def create_list():
     # print("Start_ airport: " , start_airport)       
     return airports, routes, start_airport
 
-def get_airport_id():
-    for i in range(len(airports)):
+def get_airport_id(noof_airports):
+    for i in range(noof_airports):
         airport_ids[airports[i]] = i
     # print("AIRPORT DICTIONARY = ",airport_ids)
     return airport_ids
 
-def get_route_matrix():
-    route_matrix = [[0 for i in range(len(airports))] for j in range(len(airports))]
+def get_route_matrix(noof_airports):
+    route_matrix = [[0 for i in range(noof_airports)] for j in range(noof_airports)]
     # print(route_matrix)
     for i in range(len(routes)):
         for j in range(2):
@@ -48,9 +48,37 @@ def get_route_matrix():
         route_matrix[start][dest]  = 1
     return route_matrix
 
+def dfs(i):
+    vis[i] = True
+    for j in range(length_route_matrix):
+        if route_matrix[i][j] == 1 and vis[j] == False:
+            dfs(j)
+    KR_stack.append(i)
+
+def get_reverse_route_matrix(noof_airports):
+    reverse_route_matrix = [[0 for i in range(noof_airports)] for j in range(noof_airports)]
+    for i in range(length_route_matrix):
+        for j in range(length_route_matrix):
+            reverse_route_matrix[i][j] = route_matrix[j][i]
+    return reverse_route_matrix
+
 
 
 airports, routes, start_airport = create_list()
+
+noof_airports = len(airports)
+
 airport_ids = {}
-get_airport_id()
-route_matrix = get_route_matrix()
+get_airport_id(noof_airports)
+
+route_matrix = get_route_matrix(noof_airports)
+
+length_route_matrix = len(route_matrix)
+vis = [False] * length_route_matrix
+KR_stack = []
+
+for i in range(length_route_matrix):
+    if vis[i] == False:
+        dfs(i)
+
+reverse_route_matrix = get_reverse_route_matrix(noof_airports)
