@@ -29,26 +29,28 @@ def create_list():
     # print("Start_ airport: " , start_airport)       
     return airports, routes, start_airport
 
-#Airport IDs
 def get_airport_id():
     for i in range(len(airports)):
-        airport_ids.append([airports[i],i])
-    # print(airport_ids)
+        airport_ids[airports[i]] = i
+    # print("AIRPORT DICTIONARY = ",airport_ids)
     return airport_ids
+
+def get_route_matrix():
+    route_matrix = [[0 for i in range(len(airports))] for j in range(len(airports))]
+    # print(route_matrix)
+    for i in range(len(routes)):
+        for j in range(2):
+            id = airport_ids[routes[i][j]] #Get airport ids for each route
+            if j == 0:
+                start = id
+            elif j == 1:
+                dest = id 
+        route_matrix[start][dest]  = 1
+    return route_matrix
+
 
 
 airports, routes, start_airport = create_list()
-
-airport_ids = []
+airport_ids = {}
 get_airport_id()
-
-route_ids = routes.copy()
-
-for i in airport_ids:
-    airport_name = i[0]
-    airport_id = i[1]
-    for i in routes:
-        if routes[0] == airport_name:
-            route_ids[]
-
-
+route_matrix = get_route_matrix()
