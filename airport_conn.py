@@ -64,21 +64,48 @@ def get_reverse_route_matrix(noof_airports):
 
 
 
+# Get list of airports, routes, start_airport
 airports, routes, start_airport = create_list()
+# print(routes)
 
 noof_airports = len(airports)
 
+# Assign an ID to each airport
 airport_ids = {}
 get_airport_id(noof_airports)
+# print(airport_ids)
 
+# Get the adacency matrix for all the routes
 route_matrix = get_route_matrix(noof_airports)
+# print(route_matrix)
 
+# Apply Kosaraju algorith to identify strongly connected components
+# 1. Perform DFS traversal of the graph, and push nodes to stack before back tracking
 length_route_matrix = len(route_matrix)
 vis = [False] * length_route_matrix
 KR_stack = []
-
 for i in range(length_route_matrix):
     if vis[i] == False:
         dfs(i)
+# print(KR_stack)
 
+# 2. Change the edge directions of the graph using transpose
 reverse_route_matrix = get_reverse_route_matrix(noof_airports)
+
+rep = [-1]*length_route_matrix
+def dfs_and_representative_node(node, representative):
+    vis[node] = True
+    rep[node] = representative
+    for j in range(length_route_matrix):
+        if reverse_route_matrix[node][j] == 1 and vis[j] == False:
+            dfs_and_representative_node(node, representative)
+
+# 3. Pop elemens from stack and perform dfs for that element on reverse graph
+vis = [False] * length_route_matrix
+for i in range(len(KR_stack)-1, 0, -1):
+    node = KR_stack[i]
+    KR_stack.pop(i)
+    if vis[node] == False:
+        dfs_and_representative_node(node, node)
+
+print(rep)
