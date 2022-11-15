@@ -73,7 +73,7 @@ noof_airports = len(airports)
 # Assign an ID to each airport
 airport_ids = {}
 get_airport_id(noof_airports)
-# print(airport_ids)
+print(airport_ids)
 
 # Get the adacency matrix for all the routes
 route_matrix = get_route_matrix(noof_airports)
@@ -98,11 +98,11 @@ def dfs_and_representative_node(node, representative):
     rep[node] = representative
     for j in range(length_route_matrix):
         if reverse_route_matrix[node][j] == 1 and vis[j] == False:
-            dfs_and_representative_node(node, representative)
+            dfs_and_representative_node(j, representative)
 
 # 3. Pop elemens from stack and perform dfs for that element on reverse graph
 vis = [False] * length_route_matrix
-for i in range(len(KR_stack)-1, 0, -1):
+for i in range(len(KR_stack)-1, -1, -1):
     node = KR_stack[i]
     KR_stack.pop(i)
     if vis[node] == False:
