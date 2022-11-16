@@ -136,6 +136,6 @@ if __name__ == "__main__":
     in_deg = initialize_in_degree()
     in_deg = find_in_degree(in_deg)
     noof_flights,destination = flights_to_be_added()
-    print(noof_flights)
+    print("Number of flights to be added:",noof_flights)
     for i in destination:
-        print(start_airport,i)
+        print("From:",start_airport,"to",i)
