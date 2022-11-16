@@ -70,22 +70,43 @@ def dfs_and_representative_node(node, representative):
             dfs_and_representative_node(j, representative)
     return rep
 
+def initialize_in_degree():
+    # Make in-degree of all the rep nodes as 0 and non-rep nodes as -1
+    in_deg = [-1] * length_route_matrix
+    for i in range(length_route_matrix):
+        if rep[i] == i:
+                in_deg[i] = 0
+    return in_deg
+
+def find_in_degree(in_deg):
+    # Find the in-degree of the nodes
+    for i in range(length_route_matrix):
+        for j in range(length_route_matrix):
+            if route_matrix[j][i] == 1 and rep[i] != rep[j]:
+                in_deg[rep[i]] = in_deg[rep[i]] + 1
+    return in_deg
+  
+def flights_to_be_added():
+    noof_flights = 0
+    destination = []
+    for i in range(len(in_deg)):
+        if in_deg[i] == 0 and i!=start_airport_id:
+            dest = list(airport_ids.keys())[list(airport_ids.values()).index(i)]
+            destination.append(dest)
+            noof_flights = noof_flights + 1
+    return noof_flights,destination
+
 # Get list of airports, routes, start_airport
 airports, routes, start_airport = create_list()
-# print(routes)
 
 noof_airports = len(airports)
-
 # Assign an ID to each airport
 airport_ids = {}
 get_airport_id(noof_airports)
-# print(airport_ids)
 start_airport_id = airport_ids[start_airport]
-# print(type(start_airport_id))
 
 # Get the adacency matrix for all the routes
 route_matrix = get_route_matrix(noof_airports)
-# print(route_matrix)
 
 # Apply Kosaraju algorith to identify strongly connected components
 # 1. Perform DFS traversal of the graph, and push nodes to stack before back tracking
@@ -100,7 +121,6 @@ for i in range(length_route_matrix):
 # 2. Change the edge directions of the graph using transpose
 reverse_route_matrix = get_reverse_route_matrix(noof_airports)
 
-
 # 3. Pop elemens from stack and perform dfs for that element on reverse graph and create a compressed graph
 rep = [-1]*length_route_matrix
 vis = [False] * length_route_matrix
@@ -110,30 +130,7 @@ for i in range(len(KR_stack)-1, -1, -1):
     if vis[node] == False:
         dfs_and_representative_node(node, node)
 
-print(rep)
-
-in_deg = [-1] * length_route_matrix
-for i in range(length_route_matrix):
-    if rep[i] == i:
-            in_deg[i] = 0
-for i in range(length_route_matrix):
-    for j in range(length_route_matrix):
-        if route_matrix[j][i] == 1 and rep[i] != rep[j]:
-        #     print(j, i, rep[i])
-            in_deg[rep[i]] = in_deg[rep[i]] + 1
-#     #         sum = sum +1
-#     # if i == rep[i]:
-#     #     in_deg[i] = sum
-#     # else:
-#     #     in_deg[rep[i]] = in_deg[rep[i]] + sum
-
-print(in_deg)
-# noof_flights = 0
-# destination = []
-# for i in range(len(in_deg)):
-#     if in_deg[i] == 0 and i!=start_airport_id:
-#         dest = list(airport_ids.keys())[list(airport_ids.values()).index(i)]
-#         destination.append(dest)
-#         noof_flights = noof_flights + 1
-# print(noof_flights)
-# print(destination)
+in_deg = initialize_in_degree()
+in_deg = find_in_degree(in_deg)
+noof_flights,destination = flights_to_be_added()
+print(noof_flights, destination)
