@@ -62,7 +62,13 @@ def get_reverse_route_matrix(noof_airports):
             reverse_route_matrix[i][j] = route_matrix[j][i]
     return reverse_route_matrix
 
-
+def dfs_and_representative_node(node, representative):
+    vis[node] = True
+    rep[node] = representative
+    for j in range(length_route_matrix):
+        if reverse_route_matrix[node][j] == 1 and vis[j] == False:
+            dfs_and_representative_node(j, representative)
+    return rep
 
 # Get list of airports, routes, start_airport
 airports, routes, start_airport = create_list()
@@ -73,7 +79,9 @@ noof_airports = len(airports)
 # Assign an ID to each airport
 airport_ids = {}
 get_airport_id(noof_airports)
-print(airport_ids)
+# print(airport_ids)
+start_airport_id = airport_ids[start_airport]
+# print(type(start_airport_id))
 
 # Get the adacency matrix for all the routes
 route_matrix = get_route_matrix(noof_airports)
@@ -92,15 +100,9 @@ for i in range(length_route_matrix):
 # 2. Change the edge directions of the graph using transpose
 reverse_route_matrix = get_reverse_route_matrix(noof_airports)
 
-rep = [-1]*length_route_matrix
-def dfs_and_representative_node(node, representative):
-    vis[node] = True
-    rep[node] = representative
-    for j in range(length_route_matrix):
-        if reverse_route_matrix[node][j] == 1 and vis[j] == False:
-            dfs_and_representative_node(j, representative)
 
-# 3. Pop elemens from stack and perform dfs for that element on reverse graph
+# 3. Pop elemens from stack and perform dfs for that element on reverse graph and create a compressed graph
+rep = [-1]*length_route_matrix
 vis = [False] * length_route_matrix
 for i in range(len(KR_stack)-1, -1, -1):
     node = KR_stack[i]
@@ -109,3 +111,29 @@ for i in range(len(KR_stack)-1, -1, -1):
         dfs_and_representative_node(node, node)
 
 print(rep)
+
+in_deg = [-1] * length_route_matrix
+for i in range(length_route_matrix):
+    if rep[i] == i:
+            in_deg[i] = 0
+for i in range(length_route_matrix):
+    for j in range(length_route_matrix):
+        if route_matrix[j][i] == 1 and rep[i] != rep[j]:
+        #     print(j, i, rep[i])
+            in_deg[rep[i]] = in_deg[rep[i]] + 1
+#     #         sum = sum +1
+#     # if i == rep[i]:
+#     #     in_deg[i] = sum
+#     # else:
+#     #     in_deg[rep[i]] = in_deg[rep[i]] + sum
+
+print(in_deg)
+# noof_flights = 0
+# destination = []
+# for i in range(len(in_deg)):
+#     if in_deg[i] == 0 and i!=start_airport_id:
+#         dest = list(airport_ids.keys())[list(airport_ids.values()).index(i)]
+#         destination.append(dest)
+#         noof_flights = noof_flights + 1
+# print(noof_flights)
+# print(destination)
